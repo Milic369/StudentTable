@@ -20,11 +20,11 @@ public class MainWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(createFileMenu());
         frame.add(createToolBar(), BorderLayout.PAGE_START);
-        mainPanel = new MainPanel(this);
+        mainPanel = new MainPanel();
         scrollPanel = new JScrollPane(mainPanel);
         fileHandler = new FileHandler(this);
         frame.add(scrollPanel, BorderLayout.CENTER);
-        frame.setSize(800,350);
+        frame.setSize(850,350);
         frame.setVisible(true);
     }
 
@@ -72,7 +72,7 @@ public class MainWindow {
         toolBar.addSeparator();
         toolBar.add(makeButton(new JButton(), "SEARCH.png", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO;
+                new SearchDialog(mainPanel, "SEARCH_MODE");
             }
         }));
         toolBar.add(makeButton(new JButton(), "ADD.png", new ActionListener() {
@@ -82,7 +82,7 @@ public class MainWindow {
         }));
         toolBar.add(makeButton(new JButton(), "REMOVE.png", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO;
+                new SearchDialog(mainPanel, "REMOVE_MODE");;
             }
         }));
         toolBar.addSeparator();
@@ -109,8 +109,8 @@ public class MainWindow {
         toolBar.addSeparator();
         JLabel label = new JLabel("Student on page: ");
         toolBar.add(label);
-        String[] sizeFont = {"10", "20", "30", "50", "100"};
-        JComboBox sizeBox = new JComboBox(sizeFont);
+        String[] sizeStudent = {"10", "20", "30", "50", "100"};
+        JComboBox sizeBox = new JComboBox(sizeStudent);
         sizeBox.setMaximumSize(sizeBox.getPreferredSize());
         sizeBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -118,6 +118,18 @@ public class MainWindow {
             }
         });
         toolBar.add(sizeBox);
+        toolBar.addSeparator();
+        label = new JLabel("Number examinations: ");
+        toolBar.add(label);
+        String[] sizeExam = {"5", "6", "7", "8", "9", "10", "12", "15", "20"};
+        JComboBox examBox = new JComboBox(sizeExam);
+        examBox.setMaximumSize(examBox.getPreferredSize());
+        examBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainPanel.changeNumberExam(e);
+            }
+        });
+        toolBar.add(examBox);
         return toolBar;
     }
 

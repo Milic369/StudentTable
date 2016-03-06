@@ -1,6 +1,5 @@
 package studenttable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +11,7 @@ public class Student {
     private String firstName;
     private String middleName;
     private int numberGroup;
+    private double middleMark;
     private List<Examination> examinations;
 
     public Student(String lastName, String firstName, String middleName,
@@ -21,6 +21,16 @@ public class Student {
         this.middleName = middleName;
         this.numberGroup = numberGroup;
         this.examinations = examinations;
+        this.middleMark = solveMiddleMark();
+    }
+
+    private double solveMiddleMark() {
+        int val = 0;
+        if (examinations.size() == 0) return 0;
+        for (Examination exam: examinations){
+            val += Integer.parseInt(exam.getExaminationMark());
+        }
+        return val/examinations.size();
     }
 
     public String getFirstName() {
@@ -63,6 +73,15 @@ public class Student {
         this.examinations = examinations;
     }
 
+    public double getMiddleMark() {
+        return middleMark;
+    }
+
+    public void setMiddleMark(double middleMark) {
+        this.middleMark = middleMark;
+    }
+
+
     public String getField(int i) {
         if (i == 0) return getLastName() + " " + getFirstName() + " " + getMiddleName();
         else if (i == 1) return Integer.toString(getNumberGroup());
@@ -79,4 +98,5 @@ public class Student {
             }
         }
     }
+
 }

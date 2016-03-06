@@ -11,14 +11,12 @@ import java.util.List;
 public class MainPanel extends JComponent {
 
     private static final Insets insets = new Insets(0, 0, 0, 0);
-    //private MainWindow mainWindow;
     private TableModel tableModel;
     private JPanel table;
     private int currentPage = 1;
     private int studentOnPage = 10;
 
-    public MainPanel(MainWindow mainWindow){
-        //this.mainWindow = mainWindow;
+    public MainPanel(){
         setLayout(new BorderLayout());
         tableModel = new TableModel();
         makePanel();
@@ -39,6 +37,7 @@ public class MainPanel extends JComponent {
         }
         int firstStudentOnPage = studentOnPage * (currentPage - 1);
         for (int y = 4, student = firstStudentOnPage; y < studentOnPage + 4 && student < students.size(); y++, student++) {
+            tableModel.setNumberMaxExaminations(students.get(student).getExaminations().size());
             for (int i = 0; i < numberExaminations * 2 + 2; i++) {
                 String write = students.get(student).getField(i);
                 addComponent(table, write, i, y, 1, 1);
@@ -120,5 +119,21 @@ public class MainPanel extends JComponent {
         repaint();
     }
 
+    public void changeNumberExam(ActionEvent e) {
+        JComboBox cb = (JComboBox)e.getSource();
+        String change = (String) cb.getSelectedItem();
+        if (canChangeNumberExam(change)){
+            tableModel.setNumberExaminations(Integer.parseInt(change));
+            updateTable();
+        } else {
+            JOptionPane.showMessageDialog
+                    (null, "Can't do number exam, small than " + tableModel.getNumberMaxExaminations(),
+                            "ERROR", JOptionPane.ERROR_MESSAGE|JOptionPane.OK_OPTION);
+        }
+    }
+
+    private boolean canChangeNumberExam(String change) {
+        return tableModel.getNumberMaxExaminations() <= Integer.parseInt(change);
+    }
 }
 

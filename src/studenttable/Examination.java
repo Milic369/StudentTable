@@ -17,6 +17,10 @@ public class Examination {
         return Integer.toString(examinationMark);
     }
 
+    public int getExaminationMarkInt() {
+        return examinationMark;
+    }
+
     public void setExaminationMark(int examinationMark) {
         this.examinationMark = examinationMark;
     }

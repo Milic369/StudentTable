@@ -9,6 +9,7 @@ import java.util.List;
 public class TableModel {
 
     private int numberExaminations = 5;
+    private int numberMaxExaminations;
     private List<Student> students;
 
     public TableModel() {
@@ -21,6 +22,18 @@ public class TableModel {
 
     public void setNumberExaminations(int numberExaminations) {
         this.numberExaminations = numberExaminations;
+    }
+
+    public int getNumberMaxExaminations() {
+        return numberMaxExaminations;
+    }
+
+    public void setNumberMaxExaminations(int maxExaminations) {
+        numberMaxExaminations = (maxExaminations > numberMaxExaminations) ? maxExaminations : numberMaxExaminations;
+    }
+
+    public void setNumberMaxExaminations() {
+        numberMaxExaminations = 5;
     }
 
     public List<Student> getStudents() {

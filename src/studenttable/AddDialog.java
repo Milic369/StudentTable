@@ -24,8 +24,8 @@ public class AddDialog {
         this.mainPanel = mainPanel;
         tableModel = mainPanel.getTableModel();
         JFrame frame = createFrame();
-        frame.setSize(500,300);
         frame.setVisible(true);
+        frame.pack();
         frame.setLocationRelativeTo(mainPanel);
     }
 
@@ -36,7 +36,7 @@ public class AddDialog {
         JLabel labelText = new JLabel("Add new student");
         labelText.setHorizontalAlignment(JLabel.CENTER);
         addComponent(jPanelID,labelText, 0, 0, 2, 1);
-        String[] labelString = {"Last Name:", "First Name:", "Middle Name:", "Group"};
+        String[] labelString = {"Last Name*:", "First Name*:", "Middle Name*:", "Group*:"};
         fieldID = new JTextField[4];
         for (int i=0; i < 4;i++){
             labelText = new JLabel(labelString[i]);
@@ -84,15 +84,7 @@ public class AddDialog {
     }
 
     private void createNewStudent() {
-        boolean allCorrect = true;
-        for (int i=0; i < 3;i++){
-            if (isNotCorrectID(i)) allCorrect = false;
-        }
-        if (isNotCorrectGroup()) allCorrect = false;
-        for (int i=0; i < tableModel.getNumberExaminations();i++){
-            if (isNotCorrectExamination(i)) allCorrect = false;
-        }
-        if (!allCorrect){
+        if (!isAllCorrect()){
             JOptionPane.showMessageDialog
                     (null, "Not correct student information", "ERROR", JOptionPane.ERROR_MESSAGE);
         } else
@@ -111,6 +103,18 @@ public class AddDialog {
                                                      examinations));
             mainPanel.updateTable();
         }
+    }
+
+    private boolean isAllCorrect() {
+        boolean allCorrect = true;
+        for (int i=0; i < 3;i++){
+            if (isNotCorrectID(i)) allCorrect = false;
+        }
+        if (isNotCorrectGroup()) allCorrect = false;
+        for (int i=0; i < tableModel.getNumberExaminations();i++){
+            if (isNotCorrectExamination(i)) allCorrect = false;
+        }
+        return allCorrect;
     }
 
     private boolean isNotCorrectGroup() {
