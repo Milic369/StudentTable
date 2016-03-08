@@ -3,6 +3,7 @@ package studenttable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -46,7 +47,29 @@ public class MainPanel extends JComponent {
         add(table, BorderLayout.NORTH);
         String statusBar = "Page " + currentPage + "/" + getNumberMaxPage()
                 + " Total records: " + students.size();
-        add(new JLabel(statusBar), BorderLayout.SOUTH);
+        JPanel panel = new JPanel();
+        panel.add(new JLabel(statusBar));
+        panel.add(MainWindow.makeButton(new JButton(), "FIRST_12.png", new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                firstPage();
+            }
+        }));
+        panel.add(MainWindow.makeButton(new JButton(), "PREVIOUS_12.png", new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                prevPage();
+            }
+        }));
+        panel.add(MainWindow.makeButton(new JButton(), "NEXT_12.png", new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                nextPage();
+            }
+        }));
+        panel.add(MainWindow.makeButton(new JButton(), "LAST_12.png", new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                lastPage();
+            }
+        }));
+        add(panel, BorderLayout.SOUTH);
     }
 
     private static void addComponent(Container container, String nameLabel,

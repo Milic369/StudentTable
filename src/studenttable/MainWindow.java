@@ -133,7 +133,7 @@ public class MainWindow {
         return toolBar;
     }
 
-    private JButton makeButton(JButton button, String imgString, ActionListener action){
+    public static JButton makeButton(JButton button, String imgString, ActionListener action){
         button.addActionListener(action);
         String patch = "img/" + imgString;
         ImageIcon img = new ImageIcon(patch);
