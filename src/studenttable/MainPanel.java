@@ -1,6 +1,7 @@
 package studenttable;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,8 +47,9 @@ public class MainPanel extends JComponent {
         }
         add(table, BorderLayout.NORTH);
         String statusBar = "Page " + currentPage + "/" + getNumberMaxPage()
-                + " Total records: " + students.size();
+                + " Total records: " + students.size() + " ";
         JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.add(new JLabel(statusBar));
         panel.add(MainWindow.makeButton(new JButton(), "FIRST_12.png", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
