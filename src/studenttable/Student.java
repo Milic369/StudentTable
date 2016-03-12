@@ -10,12 +10,12 @@ public class Student {
     private String lastName;
     private String firstName;
     private String middleName;
-    private int numberGroup;
+    private String numberGroup;
     private double middleMark;
     private List<Examination> examinations;
 
     public Student(String lastName, String firstName, String middleName,
-                   int numberGroup, List<Examination> examinations) {
+                   String numberGroup, List<Examination> examinations) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -57,11 +57,11 @@ public class Student {
         this.middleName = middleName;
     }
 
-    public int getNumberGroup() {
+    public String getNumberGroup() {
         return numberGroup;
     }
 
-    public void setNumberGroup(int numberGroup) {
+    public void setNumberGroup(String numberGroup) {
         this.numberGroup = numberGroup;
     }
 
@@ -84,7 +84,7 @@ public class Student {
 
     public String getField(int i) {
         if (i == 0) return getLastName() + " " + getFirstName() + " " + getMiddleName();
-        else if (i == 1) return Integer.toString(getNumberGroup());
+        else if (i == 1) return getNumberGroup();
         else {
             int numberExamination = (i - 2) / 2;
             if (i % 2 == 0) {

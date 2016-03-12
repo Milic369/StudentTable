@@ -12,19 +12,31 @@ import java.util.List;
  */
 public class FileHandler {
 
+    private static final String LAST_NAME = "lastName";
+    private static final String FIRST_NAME = "firstName";
+    private static final String MIDDLE_NAME = "middleName";
+    private static final String GROUP = "group";
+    private static final String EXAM = "exam";
+    private static final String NAME = "name";
+    private static final String NUMBER_EXAM = "numberExam";
+    private static final String STUDENT = "student";
+    private static final String STUDENTS = "students";
+    private static final String FORMAT = "UTF-8";
+    private static final String VER = "1.0";
+    private static final String EXTENSION = "stable";
     private MainWindow mainWindow;
-    private MainPanel mainPanel;
+    private StudentTableWithPaging studentTableWithPaging;
     private TableModel tableModel;
 
     public FileHandler(MainWindow mainWindow){
         this.mainWindow = mainWindow;
-        this.mainPanel = mainWindow.getMainPanel();
-        this.tableModel = mainWindow.getMainPanel().getTableModel();
+        this.studentTableWithPaging = mainWindow.getStudentTableWithPaging();
+        this.tableModel = mainWindow.getStudentTableWithPaging().getTableModel();
     }
 
     public void openFile(){
         JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(new FileNameExtensionFilter( "Student table", "stable"));
+        fc.setFileFilter(new FileNameExtensionFilter( "Student table", EXTENSION));
         if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 openXMLFile(fc.getSelectedFile().getPath());
         }
@@ -36,21 +48,21 @@ public class FileHandler {
             if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 XMLOutputFactory output = XMLOutputFactory.newInstance();
                 XMLStreamWriter writer = output.createXMLStreamWriter
-                        (new FileWriter(fc.getSelectedFile() + ".stable"));
-                writer.writeStartDocument("UTF-8", "1.0");
-                writer.writeStartElement("text");
-                writer.writeStartElement("numberExam");
+                        (new FileWriter(fc.getSelectedFile() + "." + EXTENSION));
+                writer.writeStartDocument(FORMAT, VER);
+                writer.writeStartElement(STUDENTS);
+                writer.writeStartElement(NUMBER_EXAM);
                 writer.writeCharacters(Integer.toString(tableModel.getNumberExaminations()));
                 writer.writeEndElement();
                 for (Student student: tableModel.getStudents()){
-                    writer.writeStartElement("student");
-                    writer.writeAttribute("lastName", student.getLastName());
-                    writer.writeAttribute("firstName", student.getFirstName());
-                    writer.writeAttribute("middleName", student.getMiddleName());
-                    writer.writeAttribute("group", Integer.toString(student.getNumberGroup()));
+                    writer.writeStartElement(STUDENT);
+                    writer.writeAttribute(LAST_NAME, student.getLastName());
+                    writer.writeAttribute(FIRST_NAME, student.getFirstName());
+                    writer.writeAttribute(MIDDLE_NAME, student.getMiddleName());
+                    writer.writeAttribute(GROUP, student.getNumberGroup());
                     for (Examination exam : student.getExaminations()) {
-                        writer.writeStartElement("exam");
-                        writer.writeAttribute("name", exam.getExaminationName());
+                        writer.writeStartElement(EXAM);
+                        writer.writeAttribute(NAME, exam.getExaminationName());
                         writer.writeCharacters(exam.getExaminationMark());
                         writer.writeEndElement();
                     }
@@ -68,45 +80,44 @@ public class FileHandler {
 
     public void openXMLFile(String fileName) {
         try {
-            tableModel.getStudents().clear();
-            List<Examination> exams = new ArrayList<Examination>();
+            String name;
+            String mark;
             String lastName = "";
             String firstName = "";
             String middleName = "";
             String group = "";
             String numberExam = "";
-            String name;
-            String mark;
+            tableModel.getStudents().clear();
+            List<Examination> exams = new ArrayList<Examination>();
             XMLStreamReader xmlr = XMLInputFactory.newInstance()
                     .createXMLStreamReader(fileName, new FileInputStream(fileName));
             while (xmlr.hasNext()) {
                 xmlr.next();
                 if (xmlr.isStartElement()) {
-                    if (xmlr.getLocalName().equals("student")){
+                    if (xmlr.getLocalName().equals(STUDENT)){
                         exams = new ArrayList<Examination>();
-                        lastName = xmlr.getAttributeValue(null, "lastName");
-                        firstName = xmlr.getAttributeValue(null, "firstName");
-                        middleName = xmlr.getAttributeValue(null, "middleName");
-                        group = xmlr.getAttributeValue(null, "group");
+                        lastName = xmlr.getAttributeValue(null, LAST_NAME);
+                        firstName = xmlr.getAttributeValue(null, FIRST_NAME);
+                        middleName = xmlr.getAttributeValue(null, MIDDLE_NAME);
+                        group = xmlr.getAttributeValue(null, GROUP);
                     }
-                    else if (xmlr.getLocalName().equals("exam")){
-                        name = xmlr.getAttributeValue(null, "name");
+                    else if (xmlr.getLocalName().equals(EXAM)){
+                        name = xmlr.getAttributeValue(null, NAME);
                         xmlr.next();
                         mark = xmlr.getText();
                         exams.add(new Examination(name, Integer.parseInt(mark)));
-                    } else if (xmlr.getLocalName().equals("numberExam")){
+                    } else if (xmlr.getLocalName().equals(NUMBER_EXAM)){
                         xmlr.next();
                         numberExam = xmlr.getText();
                     }
                 } else if (xmlr.isEndElement()) {
-                    if (xmlr.getLocalName().equals("student")){
-                        tableModel.getStudents().add(new Student(lastName, firstName, middleName,
-                                Integer.parseInt(group), exams));
+                    if (xmlr.getLocalName().equals(STUDENT)){
+                        tableModel.getStudents().add(new Student(lastName, firstName, middleName, group, exams));
                     }
                 }
             }
             tableModel.setNumberExaminations(Integer.parseInt(numberExam));
-            mainPanel.updateTable();
+            studentTableWithPaging.updateComponent();
             mainWindow.updateWindow();
         } catch (Exception e) {
             JOptionPane.showMessageDialog
