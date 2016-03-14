@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 /**
  * Created by andrey on 18/02/16.
@@ -15,7 +13,6 @@ public class MainWindow {
     private FileHandler fileHandler;
     private StudentTableWithPaging studentTableWithPaging;
     private JFrame frame;
-    private JScrollPane scrollPanel;
 
     public MainWindow() {
         frame = new JFrame("Student Table");
@@ -23,22 +20,11 @@ public class MainWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(createFileMenu());
         frame.add(createToolBar(), BorderLayout.PAGE_START);
-        studentTableWithPaging = new StudentTableWithPaging(this);
-        scrollPanel = new JScrollPane(studentTableWithPaging);
+        studentTableWithPaging = new StudentTableWithPaging();
         fileHandler = new FileHandler(this);
-        frame.add(scrollPanel, BorderLayout.CENTER);
+        frame.add(studentTableWithPaging, BorderLayout.CENTER);
+        frame.setMinimumSize(new Dimension(850,350));
         frame.setVisible(true);
-        frame.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                resolveTableSize();
-            }
-        });
-    }
-
-    private void resolveTableSize() {
-        int height = (int)frame.getSize().getHeight()-100;
-        studentTableWithPaging.setHeightTable(height);
-        studentTableWithPaging.getScrollTable().setPreferredSize(new Dimension(0, height));
     }
 
     private JMenuBar createFileMenu() {
@@ -101,22 +87,12 @@ public class MainWindow {
         return toolBar;
     }
 
-    public void updateWindow() {
-        scrollPanel.revalidate();
-        scrollPanel.repaint();
-        frame.requestFocus();
-    }
-
     public StudentTableWithPaging getStudentTableWithPaging(){
         return studentTableWithPaging;
     }
 
     public JFrame getFrame(){
         return frame;
-    }
-
-    public JScrollPane getScrollPanel(){
-        return scrollPanel;
     }
 
     public static void main(String[] args){

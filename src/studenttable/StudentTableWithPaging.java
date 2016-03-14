@@ -15,17 +15,15 @@ import java.util.List;
 public class StudentTableWithPaging extends JComponent {
 
     private TableModel tableModel;
-    private MainWindow mainWindow;
     private JScrollPane scrollTable;
     private int currentPage = 1;
     private int studentOnPage = 10;
     private int heightTable;
 
-    public StudentTableWithPaging(MainWindow mainWindow){
-        this.mainWindow = mainWindow;
-        setLayout(new BorderLayout());
+    public StudentTableWithPaging(){
+        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         tableModel = new TableModel();
-        heightTable = (int)mainWindow.getFrame().getSize().getHeight()-100;
+        heightTable = 250;
         makePanel();
     }
 
@@ -34,14 +32,13 @@ public class StudentTableWithPaging extends JComponent {
         tablePanel.setLayout(new BorderLayout());
         tablePanel.add(makeTable(), BorderLayout.NORTH);
         scrollTable = new JScrollPane(tablePanel);
-        scrollTable.setPreferredSize(new Dimension(0, heightTable));
         scrollTable.getHorizontalScrollBar().addAdjustmentListener(new AdjustmentListener() {
             public void adjustmentValueChanged(AdjustmentEvent evt) {
                 updateScrollTable();
             }
         });
-        add(scrollTable, BorderLayout.NORTH);
-        add(makeToolsPanel(), BorderLayout.SOUTH);
+        add(scrollTable);
+        add(makeToolsPanel());
     }
 
     private JPanel makeTable(){
@@ -120,6 +117,7 @@ public class StudentTableWithPaging extends JComponent {
             }
         });
         panel.add(examBox);
+        panel.setMaximumSize(new Dimension(840,100));
         return panel;
     }
 

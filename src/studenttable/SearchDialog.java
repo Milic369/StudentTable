@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
  */
 public class SearchDialog {
 
-    private MainWindow mainWindow;
     private StudentTableWithPaging studentTableWithPaging;
     private TableModel tableModel;
     private String mode;
@@ -24,10 +23,8 @@ public class SearchDialog {
     private JComboBox maxMark;
     private JFrame frame;
     private StudentTableWithPaging searchPanel;
-    private JScrollPane searchScrollPanel;
 
     public SearchDialog(MainWindow mainWindow, String mode) {
-        this.mainWindow = mainWindow;
         this.studentTableWithPaging = mainWindow.getStudentTableWithPaging();
         this.mode = mode;
         tableModel = studentTableWithPaging.getTableModel();
@@ -53,7 +50,7 @@ public class SearchDialog {
         jPanelID.setLayout(new GridBagLayout());
         labelText.setHorizontalAlignment(JLabel.CENTER);
         AddComponent.add(jPanelID,labelText, 0, 0, 3, 1);
-        String[] labelString = {"Last Name*:", "Group:"};
+        String[] labelString = {"Last Name:", "Group:"};
         labelText = new JLabel(labelString[0]);
         AddComponent.add(jPanelID,labelText, 0, 1, 1, 1);
         lastName = new JTextField(30);
@@ -95,19 +92,17 @@ public class SearchDialog {
 
     private void searchStudent(){
         if (isAllCorrect()){
-            if (searchScrollPanel != null) frame.remove(searchScrollPanel);
-            searchPanel = new StudentTableWithPaging(mainWindow);
+            if (searchPanel != null) frame.remove(searchPanel);
+            searchPanel = new StudentTableWithPaging();
             searchPanel.getTableModel().setNumberExaminations(studentTableWithPaging.getTableModel().getNumberExaminations());
-            searchScrollPanel = new JScrollPane(searchPanel);
             for (Student student: tableModel.getStudents()) {
                 if (compliesTemplate(student)) {
                     searchPanel.getTableModel().getStudents().add(student);
                 }
             }
-            searchPanel.setHeightTable(150);
             searchPanel.updateComponent();
-            frame.add(searchScrollPanel, BorderLayout.CENTER);
-            frame.pack();
+            frame.add(searchPanel, BorderLayout.CENTER);
+            frame.setSize(new Dimension(850,350));
             frame.revalidate();
             frame.repaint();
         } else {
@@ -167,16 +162,13 @@ public class SearchDialog {
     }
 
     private boolean isAllCorrect() {
-        if (isNotCorrectLastName()) return false;
-        if (isNotCorrectGroup()) return false;
-        if (isNotCorrectMark(minMiddleMark, maxMiddleMark)) return false;
-        if (isNotCorrectMark(minMark, maxMark)) return false;
-        return true;
+        return (!(isNotCorrectLastName() || isNotCorrectGroup() ||
+                isNotCorrectMark(minMiddleMark, maxMiddleMark) || isNotCorrectMark(minMark, maxMark)));
     }
 
     private boolean isNotCorrectGroup() {
         Pattern p = Pattern.compile("[0-9]+");
-        return !p.matcher(group.getText()).matches() ^ group.getText().equals("");
+        return (!p.matcher(group.getText()).matches() ^ group.getText().equals(""));
     }
 
     private boolean isNotCorrectLastName() {

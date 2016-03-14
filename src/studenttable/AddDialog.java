@@ -100,16 +100,8 @@ public class AddDialog {
     }
 
     private boolean isAllCorrect() {
-        if (isNotCorrectID(LAST_NAME)) return false;
-        if (isNotCorrectID(FIRST_NAME)) return false;
-        if (isNotCorrectID(MIDDLE_NAME)) return false;
-        if (isNotCorrectGroup()) return false;
-        for (Map.Entry exam: examinationsMap.entrySet()) {
-            JTextField name = (JTextField)exam.getKey();
-            JComboBox mark = (JComboBox)exam.getValue();
-            if (isNotCorrectExamination(name.getText(), (String)mark.getSelectedItem())) return false;
-        }
-        return true;
+        return (!(isNotCorrectID(LAST_NAME) || isNotCorrectID(FIRST_NAME) || isNotCorrectID(MIDDLE_NAME) ||
+                isNotCorrectGroup() || isNotCorrectExaminations()));
     }
 
     private boolean isNotCorrectGroup() {
@@ -124,6 +116,15 @@ public class AddDialog {
     private boolean isNotCorrectID(String key) {
         return ((fieldID.get(key).getText().equals("")) ||
                 (fieldID.get(key).getText().length() > 0 && fieldID.get(key).getText().charAt(0) == ' '));
+    }
+
+    private boolean isNotCorrectExaminations() {
+        for (Map.Entry exam: examinationsMap.entrySet()) {
+            JTextField name = (JTextField)exam.getKey();
+            JComboBox mark = (JComboBox)exam.getValue();
+            if (isNotCorrectExamination(name.getText(), (String)mark.getSelectedItem())) return true;
+        }
+        return false;
     }
 
     private boolean isNotCorrectExamination(String name, String mark) {

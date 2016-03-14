@@ -118,7 +118,6 @@ public class FileHandler {
             }
             tableModel.setNumberExaminations(Integer.parseInt(numberExam));
             studentTableWithPaging.updateComponent();
-            mainWindow.updateWindow();
         } catch (Exception e) {
             JOptionPane.showMessageDialog
                     (null, "Can't open file", "ERROR", JOptionPane.ERROR_MESSAGE);
