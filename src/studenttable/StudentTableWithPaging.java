@@ -46,19 +46,22 @@ public class StudentTableWithPaging extends JComponent {
         table.setLayout(new GridBagLayout());
         int numberExaminations = tableModel.getNumberExaminations();
         List<Student> students = tableModel.getStudents();
-        AddComponent.add(table, "Full Name", 0, 1, 1, 3);
-        AddComponent.add(table, "Group", 1, 1, 1, 3);
-        AddComponent.add(table, "Examinations", 2, 1, numberExaminations * 2, 1);
+        AddComponent.add(table, "Full Name", 0, 0, 1, 3);
+        AddComponent.add(table, "Group", 1, 0, 1, 3);
+        AddComponent.add(table, "Examinations", 2, 0, numberExaminations * 2, 1);
         for (int i = 0, x = 2; i < numberExaminations; i++, x += 2) {
-            AddComponent.add(table, Integer.toString(i + 1), x, 2, 2, 1);
-            AddComponent.add(table, "name", x, 3, 1, 1);
-            AddComponent.add(table, "mark", x + 1, 3, 1, 1);
+            AddComponent.add(table, Integer.toString(i + 1), x, 1, 2, 1);
+            AddComponent.add(table, "name", x, 2, 1, 1);
+            AddComponent.add(table, "mark", x + 1, 2, 1, 1);
         }
         int firstStudentOnPage = studentOnPage * (currentPage - 1);
-        for (int y = 4, student = firstStudentOnPage; y < studentOnPage + 4 && student < students.size(); y++, student++) {
+        int lineInHeaderTable = 3;
+        for (int y = lineInHeaderTable, student = firstStudentOnPage;
+             y < studentOnPage + lineInHeaderTable && student < students.size();
+             y++, student++) {
             tableModel.setNumberMaxExaminations(students.get(student).getExaminations().size());
             for (int i = 0; i < numberExaminations * 2 + 2; i++) {
-                String write = students.get(student).getField(i);
+                String write = getFieldForStudent(students.get(student), i);
                 AddComponent.add(table, write, i, y, 1, 1);
             }
         }
@@ -119,6 +122,23 @@ public class StudentTableWithPaging extends JComponent {
         panel.add(examBox);
         panel.setMaximumSize(new Dimension(840,100));
         return panel;
+    }
+
+    public String getFieldForStudent(Student student, int i) {
+        if (i == 0) return student.getLastName() + " " + student.getFirstName() + " " + student.getMiddleName();
+        else if (i == 1) return student.getNumberGroup();
+        else {
+            int numberExamination = (i - 2) / 2;
+            if (i % 2 == 0) {
+                if (numberExamination < student.getExaminations().size()) {
+                    return student.getExaminations().get(numberExamination).getExaminationName();
+                } else return " - ";
+            } else {
+                if (numberExamination < student.getExaminations().size()) {
+                    return student.getExaminations().get(numberExamination).getExaminationMark();
+                } else return " - ";
+            }
+        }
     }
 
     public void nextPage(){

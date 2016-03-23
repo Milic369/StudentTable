@@ -81,22 +81,4 @@ public class Student {
         this.middleMark = middleMark;
     }
 
-
-    public String getField(int i) {
-        if (i == 0) return getLastName() + " " + getFirstName() + " " + getMiddleName();
-        else if (i == 1) return getNumberGroup();
-        else {
-            int numberExamination = (i - 2) / 2;
-            if (i % 2 == 0) {
-                if (numberExamination < getExaminations().size()) {
-                    return getExaminations().get(numberExamination).getExaminationName();
-                } else return " - ";
-            } else {
-                if (numberExamination < getExaminations().size()) {
-                    return getExaminations().get(numberExamination).getExaminationMark();
-                } else return " - ";
-            }
-        }
-    }
-
 }
